@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Codex Command Center repository banner</title>
+  <desc id="desc">A dark engineering interface banner for Codex Command Center.</desc>
+  <rect width="1280" height="640" fill="#0b0d10"/>
+  <rect x="72" y="76" width="1136" height="488" rx="28" fill="#101419" stroke="#2a3038" stroke-width="2"/>
+  <rect x="112" y="116" width="224" height="408" rx="18" fill="#0d0f12" stroke="#252b33"/>
+  <rect x="376" y="116" width="792" height="408" rx="18" fill="#15191f" stroke="#2a3038"/>
+  <rect x="144" y="152" width="54" height="54" rx="12" fill="#1f5fbf"/>
+  <path d="M164 179l-10 10 10 10M181 179l10 10-10 10M177 166l-13 45" fill="none" stroke="#e7eaee" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="224" y="176" fill="#f3f6fa" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">Codex Command Center</text>
+  <text x="224" y="206" fill="#98a2b3" font-family="Segoe UI, Arial, sans-serif" font-size="14">Local engineering work control</text>
+  <rect x="144" y="258" width="160" height="34" rx="8" fill="#171b21" stroke="#303741"/>
+  <rect x="144" y="310" width="160" height="34" rx="8" fill="#1b2230" stroke="#3b7bea"/>
+  <rect x="144" y="362" width="160" height="34" rx="8" fill="#171b21" stroke="#303741"/>
+  <rect x="144" y="414" width="160" height="34" rx="8" fill="#171b21" stroke="#303741"/>
+  <text x="424" y="188" fill="#98a2b3" font-family="Segoe UI, Arial, sans-serif" font-size="18">Project -> Task -> Codex Session -> File Changes -> Result</text>
+  <text x="424" y="246" fill="#f3f6fa" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700">Turn Codex sessions into</text>
+  <text x="424" y="312" fill="#f3f6fa" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700">organized engineering work.</text>
+  <rect x="424" y="378" width="176" height="70" rx="10" fill="#101419" stroke="#303741"/>
+  <rect x="624" y="378" width="176" height="70" rx="10" fill="#101419" stroke="#303741"/>
+  <rect x="824" y="378" width="176" height="70" rx="10" fill="#101419" stroke="#303741"/>
+  <text x="448" y="407" fill="#98a2b3" font-family="Segoe UI, Arial, sans-serif" font-size="14">PROJECTS</text>
+  <text x="448" y="432" fill="#77d68c" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Local</text>
+  <text x="648" y="407" fill="#98a2b3" font-family="Segoe UI, Arial, sans-serif" font-size="14">TASKS</text>
+  <text x="648" y="432" fill="#ffd37a" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Focused</text>
+  <text x="848" y="407" fill="#98a2b3" font-family="Segoe UI, Arial, sans-serif" font-size="14">CODEX</text>
+  <text x="848" y="432" fill="#6ea0ff" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Resumable</text>
+</svg>

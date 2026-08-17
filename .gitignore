@@ -1,36 +1,20 @@
-.build/
-.swiftpm/
-.DS_Store
-artifacts/
-build/
-build-mas/
-logs/
-.xcuserstate
-._*
-CodMate.app
-
-# Xcode per-user state and caches
-**/xcuserdata/**
-**/*.xcuserstate
-**/*.xcbkptlist
-CodMate.xcodeproj/project.xcworkspace/xcuserdata/
-codmate.xcodeproj/project.xcworkspace/xcuserdata/
-CodMate.xcodeproj/xcuserdata/
-codmate.xcodeproj/xcuserdata/
-
-# Vendored or local packages to exclude
-SwiftTerm/
+node_modules/
 dist/
-.env
-.comate
-.serena
-# Project-level AI assistant configs (generated at runtime)
-.claude/
-.codex/
-.gemini/
+src-tauri/target/
 
-# Sisyphus (agent) workspace
+.env
+.env.*
+!.env.example
+
+.DS_Store
+Thumbs.db
+*.log
+
+.codex/
+.claude/
+.gemini/
+.serena/
 .sisyphus/
 
-# Local build artifacts
-libghostty.a
+build/
+artifacts/

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Codex Command Center icon</title>
+  <rect width="256" height="256" rx="48" fill="#0b0d10"/>
+  <rect x="46" y="52" width="164" height="152" rx="24" fill="#15191f" stroke="#303741" stroke-width="8"/>
+  <path d="M86 101l-28 27 28 27" fill="none" stroke="#6ea0ff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M170 101l28 27-28 27" fill="none" stroke="#6ea0ff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M146 82l-36 92" fill="none" stroke="#77d68c" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="128" cy="128" r="88" fill="none" stroke="#252b33" stroke-width="6"/>
+</svg>

@@ -1,6 +1,0 @@
-// Ghostty C API module definition
-module CGhostty {
-    umbrella header "ghostty.h"
-    export *
-    link "ghostty"
-}

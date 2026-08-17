@@ -1,1 +1,0 @@
-../../Vendor/include/ghostty.h
