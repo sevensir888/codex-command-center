@@ -1,10 +1,10 @@
-# Codex Command Center
+﻿# Codex Command Center
 
 **Turn Codex sessions into organized engineering work.**
 
 Codex Command Center is a local desktop control center for organizing projects, engineering tasks, Codex sessions, Git changes, Skills, and MCP configuration. Codex remains the execution engine for reasoning, editing, commands, and tests; Codex Command Center provides the organizational layer above that work.
 
-![Codex Command Center banner](public/repository-banner.svg)
+![Codex Command Center banner](public/repository-banner.png)
 
 ## Overview
 
@@ -135,3 +135,4 @@ Codex Command Center does not add telemetry, analytics, accounts, cloud synchron
 ## Disclaimer
 
 Codex Command Center is an independent open-source project and is not affiliated with or endorsed by OpenAI.
+
