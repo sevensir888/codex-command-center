@@ -149,7 +149,7 @@ async function invokeNative<T>(command: string, args?: Record<string, unknown>):
 }
 
 function App() {
-  const [section, setSection] = useState<Section>("dashboard");
+  const [section, setSection] = useState<Section>(initialSection());
   const [state, setState] = useState<AppState>(emptyState);
   const [sessions, setSessions] = useState<CodexSession[]>([]);
   const [environment, setEnvironment] = useState<CodexEnvironment>(emptyEnvironment);
@@ -180,6 +180,18 @@ function App() {
       }
     } catch (error) {
       setNativeAvailable(false);
+      if (isScreenshotPreview()) {
+        const fixture = screenshotFixture();
+        setState(fixture.state);
+        setSessions(fixture.sessions);
+        setEnvironment(fixture.environment);
+        setGit(fixture.git);
+        setSelectedProjectId(fixture.state.projects[0]?.id ?? "");
+        setSelectedTaskId(fixture.state.tasks[0]?.id ?? "");
+        setSelectedSessionId(fixture.sessions[0]?.id ?? "");
+        setNotice("Screenshot preview data is active. Launch the Tauri app for live filesystem, Git, and Codex actions.");
+        return;
+      }
       const local = loadBrowserState();
       setState(local);
       setNotice("Desktop integration is offline in this browser preview. Launch the Tauri app for filesystem, Git, and Codex actions.");
@@ -640,7 +652,9 @@ function ProjectsView(props: {
                 )}
               </Panel>
             </div>
-            <GitPanel status={status} project={props.selectedProject} />
+            <div data-screenshot-anchor="git">
+              <GitPanel status={status} project={props.selectedProject} />
+            </div>
           </>
         )}
       </section>
@@ -1004,6 +1018,166 @@ function formatDate(value: string) {
   }
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
+
+function initialSection(): Section {
+  if (typeof window === "undefined") return "dashboard";
+  const section = new URLSearchParams(window.location.search).get("section");
+  return isSection(section) ? section : "dashboard";
+}
+
+function isSection(value: string | null): value is Section {
+  return value === "dashboard" || value === "projects" || value === "sessions" || value === "codex" || value === "settings";
+}
+
+function isScreenshotPreview() {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("screenshot") === "1";
+}
+
+function screenshotFixture(): InitialData {
+  const state: AppState = {
+    projects: [
+      { id: "project-desktop", name: "desktop-client", path: "D:\\Projects\\desktop-client", createdAt: "2026-08-12T09:00:00.000Z" },
+      { id: "project-api", name: "api-service", path: "D:\\Projects\\api-service", createdAt: "2026-08-14T10:30:00.000Z" },
+      { id: "project-web", name: "sample-web-app", path: "D:\\Projects\\sample-web-app", createdAt: "2026-08-16T15:45:00.000Z" }
+    ],
+    tasks: [
+      {
+        id: "task-release",
+        projectId: "project-desktop",
+        title: "Prepare release candidate",
+        description: "Tighten documentation, packaging, and local validation before publication.",
+        status: "Active",
+        createdAt: "2026-08-17T08:30:00.000Z",
+        updatedAt: "2026-08-19T07:20:00.000Z",
+        completionSummary: ""
+      },
+      {
+        id: "task-git-review",
+        projectId: "project-desktop",
+        title: "Review Git changes before handoff",
+        description: "Inspect staged and unstaged files, then prepare a focused commit.",
+        status: "Planned",
+        createdAt: "2026-08-18T11:15:00.000Z",
+        updatedAt: "2026-08-18T11:15:00.000Z",
+        completionSummary: ""
+      },
+      {
+        id: "task-session-index",
+        projectId: "project-api",
+        title: "Link session history to active tasks",
+        description: "Attach recent Codex sessions to the project tasks that produced them.",
+        status: "Completed",
+        createdAt: "2026-08-15T13:00:00.000Z",
+        updatedAt: "2026-08-18T16:45:00.000Z",
+        completionSummary: "Session metadata is organized by project."
+      }
+    ],
+    links: [
+      { taskId: "task-release", sessionId: "session-release-readiness" },
+      { taskId: "task-git-review", sessionId: "session-git-review" },
+      { taskId: "task-session-index", sessionId: "session-indexing" }
+    ],
+    settings: {
+      codexCommand: "codex",
+      sessionsRoot: "C:\\Users\\sample\\.codex\\sessions"
+    }
+  };
+
+  return {
+    state,
+    sessions: [
+      {
+        id: "session-release-readiness",
+        filePath: "C:\\Users\\sample\\.codex\\sessions\\session-release-readiness.jsonl",
+        projectPath: "D:\\Projects\\desktop-client",
+        createdAt: "2026-08-19T06:50:00.000Z",
+        lastActivity: "2026-08-19T07:20:00.000Z",
+        title: "Prepare the Windows release candidate",
+        model: "gpt-5-codex",
+        lineCount: 184
+      },
+      {
+        id: "session-git-review",
+        filePath: "C:\\Users\\sample\\.codex\\sessions\\session-git-review.jsonl",
+        projectPath: "D:\\Projects\\desktop-client",
+        createdAt: "2026-08-18T11:10:00.000Z",
+        lastActivity: "2026-08-18T11:45:00.000Z",
+        title: "Inspect staged and unstaged changes",
+        model: "gpt-5-codex",
+        lineCount: 96
+      },
+      {
+        id: "session-indexing",
+        filePath: "C:\\Users\\sample\\.codex\\sessions\\session-indexing.jsonl",
+        projectPath: "D:\\Projects\\api-service",
+        createdAt: "2026-08-17T14:00:00.000Z",
+        lastActivity: "2026-08-18T16:45:00.000Z",
+        title: "Index local Codex session metadata",
+        model: "gpt-5-codex",
+        lineCount: 142
+      }
+    ],
+    environment: {
+      cliFound: true,
+      cliPath: "C:\\Program Files\\Codex\\codex.exe",
+      cliVersion: "codex-cli 0.0.0",
+      configFiles: [
+        {
+          path: "C:\\Users\\sample\\.codex\\config.toml",
+          exists: true,
+          redactedPreview: "model = \"gpt-5-codex\"\napi_key = [redacted]\n[mcp_servers.local-docs]\ncommand = \"npx\""
+        },
+        {
+          path: "C:\\Users\\sample\\.codex\\mcp.json",
+          exists: true,
+          redactedPreview: "{\"mcpServers\":{\"local-docs\":{\"command\":\"npx\"}}}"
+        }
+      ],
+      skills: [
+        { name: "release-readiness", location: "C:\\Users\\sample\\.codex\\skills\\release-readiness", available: true },
+        { name: "windows-packaging", location: "C:\\Users\\sample\\.codex\\skills\\windows-packaging", available: true }
+      ],
+      mcpServers: [
+        { name: "local-docs", commandType: "npx", configured: true, source: "C:\\Users\\sample\\.codex\\mcp.json" },
+        { name: "workspace-tools", commandType: "toml section", configured: true, source: "C:\\Users\\sample\\.codex\\config.toml" }
+      ]
+    },
+    git: [
+      {
+        projectId: "project-desktop",
+        path: "D:\\Projects\\desktop-client",
+        exists: true,
+        isGitRepo: true,
+        branch: "release/v0.1.0",
+        changed: [
+          { path: "README.md", status: "M", staged: false },
+          { path: ".github/workflows/release.yml", status: "A", staged: true },
+          { path: "docs/releases/v0.1.0.md", status: "A", staged: false }
+        ],
+        error: ""
+      },
+      {
+        projectId: "project-api",
+        path: "D:\\Projects\\api-service",
+        exists: true,
+        isGitRepo: true,
+        branch: "main",
+        changed: [],
+        error: ""
+      },
+      {
+        projectId: "project-web",
+        path: "D:\\Projects\\sample-web-app",
+        exists: true,
+        isGitRepo: true,
+        branch: "feature/navigation",
+        changed: [{ path: "src/navigation.ts", status: "M", staged: false }],
+        error: ""
+      }
+    ]
+  };
 }
 
 createRoot(document.getElementById("root")!).render(<App />);
