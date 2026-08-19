@@ -1,24 +1,101 @@
 # Contributing
 
-Codex Command Center is intentionally focused: it organizes local Codex engineering work around projects, tasks, sessions, Git changes, Skills, and MCP configuration.
+Thanks for considering a contribution to Codex Command Center.
 
-Please keep contributions aligned with that scope.
+The project is intentionally focused: it organizes local Codex engineering work around projects, tasks, sessions, Git changes, Skills, and MCP configuration. Contributions should strengthen that workflow without turning the app into an IDE, terminal emulator, chat client, cloud service, or generic provider dashboard.
 
-## Local Development
+## Setup
+
+Requirements:
+
+- Windows 11 for the primary desktop development target.
+- Node.js 20 or newer.
+- Rust and Cargo for Tauri development and desktop builds.
+- Git on `PATH`.
+- Codex CLI on `PATH` when testing launch, resume, session, Skills, or MCP behavior.
+
+Install dependencies:
 
 ```bash
-npm install
-npm run dev
-npm run build
+npm ci
 ```
 
-Use `npm run tauri:dev` when the local Tauri and Rust toolchain is available.
+Run the browser development surface:
 
-## Guidelines
+```bash
+npm run dev
+```
 
-- Keep the product Codex-only.
-- Keep the app local-first.
-- Avoid adding cloud services, accounts, telemetry, provider marketplaces, remote execution, terminal emulation, embedded editors, or chat-client behavior.
-- Keep UI text English-only.
-- Prefer small, readable changes over broad rewrites.
-- Do not expose API keys, tokens, secrets, or raw stack traces in user-facing UI.
+Run the desktop app when Rust and Tauri prerequisites are available:
+
+```bash
+npm run tauri:dev
+```
+
+## Validation
+
+Run the narrowest useful checks for your change. For most frontend or documentation changes:
+
+```bash
+npm run build
+npm run check:secrets
+```
+
+For native changes, also run Rust checks from the repository root when Cargo is available:
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
+```
+
+For packaging changes:
+
+```bash
+npm run tauri:build
+```
+
+## Coding expectations
+
+- Keep the product Codex-only and local-first.
+- Use existing React, TypeScript, Tauri, and Rust patterns before adding abstractions.
+- Keep native commands small and explicit.
+- Do not add cloud sync, accounts, telemetry, marketplace behavior, remote SSH orchestration, or provider switching.
+- Keep UI and repository-facing text in professional English.
+- Preserve readable errors such as "Codex CLI was not found." instead of exposing stack traces.
+- Avoid unrelated refactors in bug-fix pull requests.
+
+## Privacy and sensitive data
+
+Codex Command Center may inspect local project paths, Git diffs, Codex session metadata, Skills, and MCP configuration. Do not include secrets, tokens, private repository content, personal data, session transcripts, or machine-specific identifiers in issues, screenshots, tests, or fixtures.
+
+Use neutral examples such as `sample-web-app`, `desktop-client`, and `api-service`.
+
+## Reporting bugs
+
+Use the bug report form and include:
+
+- app version or commit;
+- Windows version;
+- Codex CLI version if relevant;
+- reproduction steps;
+- expected and actual behavior;
+- logs or screenshots with sensitive data removed.
+
+## Proposing features
+
+Feature requests should describe the workflow problem, the proposed behavior, alternatives considered, and the expected benefit. Requests that require cloud accounts, telemetry, collaboration hosting, generic provider switching, or remote execution are outside the current scope.
+
+## Pull requests
+
+Good pull requests are focused, explain the problem, describe the implementation, include validation evidence, and update documentation when behavior changes. UI changes should include screenshots.
+
+Maintainer review focuses on:
+
+- product scope;
+- local-first behavior;
+- correctness and maintainability;
+- privacy and redaction;
+- Windows reliability;
+- attribution and licensing;
+- test or build evidence.

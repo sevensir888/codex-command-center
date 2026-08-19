@@ -1,85 +1,100 @@
-﻿# Codex Command Center
+# Codex Command Center
 
 **Turn Codex sessions into organized engineering work.**
 
-Codex Command Center is a local desktop control center for organizing projects, engineering tasks, Codex sessions, Git changes, Skills, and MCP configuration. Codex remains the execution engine for reasoning, editing, commands, and tests; Codex Command Center provides the organizational layer above that work.
+![CI](https://github.com/sevensir888/codex-command-center/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue)
+![Platform](https://img.shields.io/badge/platform-Windows-0078d4)
 
 ![Codex Command Center banner](public/repository-banner.png)
 
+Codex Command Center is a Windows-first, local-first desktop workspace for organizing Codex-based engineering work across projects, tasks, sessions, Git changes, Skills, and MCP configuration.
+
+Codex does the reasoning, editing, commands, and tests. Codex Command Center keeps the surrounding engineering workflow understandable and resumable.
+
 ## Overview
 
-Developers can accumulate many Codex sessions across many repositories. Those sessions are valuable, but engineering work is usually tracked by project, objective, code changes, and result.
+Heavy Codex usage can leave useful context spread across:
 
-Codex Command Center connects those pieces into one local workflow:
+- local repositories;
+- engineering objectives;
+- Codex session history;
+- staged and unstaged Git changes;
+- local Skills;
+- MCP configuration.
 
-`Project -> Task -> Codex Session -> File Changes -> Result`
+Codex Command Center connects those pieces into one focused workflow:
 
-The app is intentionally smaller than an IDE, a chat client, or a full Git GUI. It focuses on keeping Codex engineering work understandable and resumable.
+```text
+Project -> Task -> Codex Session -> File Changes -> Result
+```
 
-## Features
-
-- **Project workspace**: register local development folders and see branch, Git state, task counts, and recent activity.
-- **Engineering tasks**: organize objectives with Planned, Active, Completed, and Blocked statuses.
-- **Local Codex session indexing**: discover useful metadata from local Codex session files without mutating them.
-- **Session resume**: resume a selected Codex session through the local Codex CLI.
-- **Launch Codex for a task**: start Codex from a project with the task title and context.
-- **Git change review**: inspect branch, staged files, unstaged files, working-tree state, and readable diffs.
-- **Codex CLI visibility**: show detected Codex executable and version when available.
-- **Skills discovery**: browse locally discoverable Codex Skills.
-- **MCP visibility**: show locally discoverable MCP server configuration.
-- **Local-first storage**: keep projects, tasks, session links, and settings on the local machine.
-- **No telemetry**: no analytics, accounts, cloud sync, or source-code upload.
+The app is intentionally smaller than an IDE, terminal emulator, chat client, or advanced Git GUI. It is an organizing layer for local Codex work.
 
 ## Screenshots
 
-Screenshots can be added under `docs/screenshots/` when release images are captured.
+| Dashboard | Projects and tasks |
+| --- | --- |
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Projects and tasks](docs/screenshots/projects.png) |
 
-Suggested first screenshots:
+| Sessions | Git changes |
+| --- | --- |
+| ![Sessions](docs/screenshots/sessions.png) | ![Git changes](docs/screenshots/git-changes.png) |
 
-- `docs/screenshots/dashboard.png`
-- `docs/screenshots/project-workspace.png`
-- `docs/screenshots/codex-environment.png`
+| Codex environment |
+| --- |
+| ![Codex environment](docs/screenshots/skills-mcp.png) |
 
-## How It Works
+## Core features
 
-- **Project**: a local source folder that Codex works inside.
-- **Task**: an engineering objective, such as implementing settings, fixing a bug, or preparing a release.
-- **Codex Session**: local Codex history associated with a task or project.
-- **File Changes**: current Git state for the selected project.
-- **Result**: the completed, blocked, or still-active outcome of the engineering task.
+- **Project organization**: register local development folders and see branch, Git state, task counts, and recent activity.
+- **Task tracking**: organize engineering objectives with Planned, Active, Completed, and Blocked statuses.
+- **Codex session discovery**: index local Codex session metadata without mutating Codex session files.
+- **Session workflows**: link sessions to tasks, launch Codex for a task, and resume selected sessions through the local Codex CLI.
+- **Git review**: inspect branch, staged files, unstaged files, working-tree state, and per-file diffs; stage, unstage, and commit focused changes.
+- **Codex environment visibility**: show detected Codex CLI path/version, redacted local configuration previews, discoverable Skills, and MCP server summaries.
+- **Local-first storage**: keep projects, tasks, session links, and settings on the local machine.
 
-Codex Command Center indexes Codex sessions as external local data. It does not rewrite Codex history and does not copy project source code into application storage.
+## Typical workflow
 
-## Local-First
+```text
+Add a repository
+-> create or select an engineering task
+-> launch or resume Codex work
+-> review indexed sessions
+-> inspect Git changes
+-> continue, complete, or block the task
+```
 
-Codex Command Center is designed for local engineering workflows:
+## Local-first behavior
 
-- project references stay local;
-- Codex sessions stay local;
-- Git diffs stay local;
-- Skills and MCP configuration are inspected locally;
-- no telemetry or external analytics are added;
-- no cloud synchronization is added.
+The app stores its own state as local JSON under the user's local application data directory. Registered projects are path references; Codex Command Center does not copy project source code into application storage.
 
-Configuration previews redact lines that appear to contain keys, tokens, secrets, or passwords.
+The native layer reads local Codex session metadata, local Codex configuration files, local Skills folders, local MCP configuration, and Git status for registered projects. Configuration previews redact lines that appear to contain keys, tokens, secrets, or passwords.
+
+The project does not add telemetry, analytics, accounts, cloud synchronization, source-code upload, Codex-session upload, or Git-diff upload. The app can still invoke external local tools such as `codex` and `git`; those tools have their own behavior and configuration.
 
 ## Requirements
 
-- Windows 11 is the primary target.
+- Windows 11 is the primary supported platform.
 - Node.js 20 or newer.
-- Rust and Cargo for Tauri desktop development builds.
-- Codex CLI on `PATH` for resume and launch actions.
+- Rust and Cargo for Tauri desktop development and production builds.
 - Git on `PATH` for Git review.
+- Codex CLI on `PATH` for launch and resume actions.
+
+## Installation
+
+Prebuilt Windows packages are intended to be published from tagged releases. Until a GitHub Release is created, build from source.
 
 ## Development
 
 Install dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
-Run the web development surface:
+Run the browser development surface:
 
 ```bash
 npm run dev
@@ -91,48 +106,69 @@ Run the desktop app:
 npm run tauri:dev
 ```
 
-Build the frontend:
+Run the frontend production build:
 
 ```bash
 npm run build
 ```
 
-Build the desktop app:
+Run the lightweight tracked-file secret scan:
+
+```bash
+npm run check:secrets
+```
+
+## Build
+
+Build the desktop application:
 
 ```bash
 npm run tauri:build
 ```
 
+For native checks when Cargo is available:
+
+```bash
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo check --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml
+```
+
 ## Architecture
 
-- **React + TypeScript** for the desktop UI.
-- **Tauri 2** for the desktop shell.
-- **Rust native commands** for local filesystem, process, Git, Codex, Skills, and MCP integration.
-- **Local state** for projects, tasks, settings, and task-session associations.
-- **Codex CLI/session integration** without adding a competing chat interface.
-- **Git CLI integration** for lightweight repository review.
-
-## GitHub Setup
-
-Recommended repository description:
-
-> A local desktop control center for organizing Codex projects, engineering tasks, sessions, Git changes, Skills, and MCP configuration.
-
-Recommended topics:
-
-`codex`, `codex-cli`, `developer-tools`, `ai-coding`, `tauri`, `rust`, `react`, `local-first`
+- **Frontend**: React and TypeScript under `src/`.
+- **Desktop shell**: Tauri 2 configuration under `src-tauri/`.
+- **Native commands**: Rust commands for local filesystem, process launch, Git, Codex session indexing, Skills discovery, and MCP configuration summaries.
+- **Storage**: local JSON state under the user's local application data directory.
+- **Codex integration**: local Codex CLI detection plus launch/resume commands.
+- **Git integration**: local Git CLI calls for branch, status, diff, stage, unstage, and commit operations.
 
 ## Relationship to CodMate
 
-Codex Command Center evolved from the open-source CodMate project by Loocor. CodMate explored a macOS SwiftUI interface for managing CLI AI sessions across several tools. Codex Command Center narrows that work into a Windows-first, Codex-only control center focused on projects, tasks, sessions, and Git changes.
+Codex Command Center evolved from the open-source CodMate project by Loocor. Upstream work is acknowledged, and applicable Apache-2.0 licensing and attribution are preserved in `LICENSE`, `NOTICE`, and `THIRD-PARTY-NOTICES.md`.
 
-The Apache License 2.0 license and upstream attribution are preserved.
+This project has been substantially refocused and reworked around a Windows-first, Codex-centric workflow for projects, tasks, sessions, and Git changes. It should not be described as built entirely from scratch.
 
-## Privacy
+## Contributing
 
-Codex Command Center does not add telemetry, analytics, accounts, cloud synchronization, source-code upload, Codex-session upload, or Git-diff upload. It is designed to organize local engineering work on the developer's machine.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Security
+
+See [SECURITY.md](SECURITY.md).
+
+## Roadmap
+
+See [ROADMAP.md](ROADMAP.md).
+
+## Release notes
+
+Release candidate notes are available under [docs/releases/v0.1.0.md](docs/releases/v0.1.0.md).
+
+## License
+
+Codex Command Center is distributed under the [Apache License 2.0](LICENSE).
 
 ## Disclaimer
 
-Codex Command Center is an independent open-source project and is not affiliated with or endorsed by OpenAI.
-
+Codex Command Center is an independent open-source project and is not an official OpenAI product. OpenAI, Codex, and related marks belong to their respective owners.
