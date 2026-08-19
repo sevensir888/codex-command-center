@@ -3,6 +3,30 @@ description: Report a focused issue in Codex Command Center.
 title: "[Bug]: "
 labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Codex Command Center. Remove API keys, tokens, private repository content, personal information, and sensitive logs before submitting.
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version
+      placeholder: "Windows 11 23H2"
+    validations:
+      required: true
+  - type: input
+    id: codex-version
+    attributes:
+      label: Codex CLI version
+      description: Include this when launch, resume, session, Skills, or MCP behavior is involved.
+      placeholder: "codex --version"
   - type: textarea
     id: summary
     attributes:
@@ -21,10 +45,24 @@ body:
         3. See ...
     validations:
       required: true
-  - type: input
-    id: environment
+  - type: textarea
+    id: expected
     attributes:
-      label: Environment
-      description: Operating system, app version, Codex CLI version if relevant.
+      label: Expected behavior
     validations:
-      required: false
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Redact secrets, private paths, repository content, and personal information.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context

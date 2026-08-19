@@ -1,0 +1,66 @@
+name: Windows Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Build Windows packages
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate frontend
+        run: npm run build
+
+      - name: Lightweight secret scan
+        run: npm run check:secrets
+
+      - name: Build Tauri application
+        run: npm run tauri:build
+
+      - name: Create checksums
+        shell: pwsh
+        run: |
+          $bundle = "src-tauri/target/release/bundle"
+          $artifacts = Get-ChildItem -LiteralPath $bundle -Recurse -File |
+            Where-Object { $_.Extension -in ".exe", ".msi", ".zip" }
+          if (-not $artifacts) {
+            throw "No Windows release artifacts were found under $bundle."
+          }
+          $lines = foreach ($artifact in $artifacts) {
+            $hash = Get-FileHash -LiteralPath $artifact.FullName -Algorithm SHA256
+            "$($hash.Hash.ToLowerInvariant())  $($artifact.Name)"
+          }
+          $lines | Set-Content -LiteralPath "$bundle/SHA256SUMS.txt" -Encoding utf8
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
+          generate_release_notes: true
+          files: |
+            src-tauri/target/release/bundle/**/*.exe
+            src-tauri/target/release/bundle/**/*.msi
+            src-tauri/target/release/bundle/**/*.zip
+            src-tauri/target/release/bundle/SHA256SUMS.txt

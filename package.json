@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/loocor/codex-command-center.git"
+    "url": "https://github.com/sevensir888/codex-command-center.git"
   },
   "keywords": [
     "codex",
@@ -21,6 +21,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 1420",
     "build": "tsc && vite build",
+    "check:secrets": "node scripts/check-secrets.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"

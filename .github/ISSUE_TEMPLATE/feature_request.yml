@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a focused workflow improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep requests aligned with the local-first Codex workflow: projects, tasks, sessions, Git changes, Skills, and MCP visibility.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed workflow
+      description: Describe the user-facing behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: benefit
+    attributes:
+      label: Expected benefit
+      description: Who benefits and how?
+    validations:
+      required: true
