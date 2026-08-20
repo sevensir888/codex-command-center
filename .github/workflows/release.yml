@@ -73,7 +73,7 @@ jobs:
           $lines | Set-Content -LiteralPath "$bundle/SHA256SUMS.txt" -Encoding utf8
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           prerelease: ${{ contains(github.ref_name, '-rc') }}
