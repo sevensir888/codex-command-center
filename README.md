@@ -77,14 +77,19 @@ The project does not add telemetry, analytics, accounts, cloud synchronization, 
 ## Requirements
 
 - Windows 11 is the primary supported platform.
-- Node.js 20 or newer.
-- Rust and Cargo for Tauri desktop development and production builds.
 - Git on `PATH` for Git review.
 - Codex CLI on `PATH` for launch and resume actions.
+- Node.js 20 or newer, Rust, and Cargo are required only for source development and production builds.
 
 ## Installation
 
-Prebuilt Windows packages are intended to be published from tagged releases. Until a GitHub Release is created, build from source.
+Windows binaries are available from [GitHub Releases](https://github.com/sevensir888/codex-command-center/releases).
+
+- **NSIS setup executable**: recommended for most Windows users. This is the normal interactive installer.
+- **MSI installer**: useful for users or environments that prefer MSI-based installation or deployment.
+- **Standalone executable**: can run directly without a normal installer.
+
+The v0.1.0 Windows binaries are currently unsigned. Source-build instructions remain in the Development and Build sections below.
 
 ## Development
 
@@ -164,7 +169,7 @@ See [ROADMAP.md](ROADMAP.md).
 
 ## Release notes
 
-Release candidate notes are available under [docs/releases/v0.1.0.md](docs/releases/v0.1.0.md).
+Release notes for v0.1.0 are available under [docs/releases/v0.1.0.md](docs/releases/v0.1.0.md) and on the [GitHub Releases page](https://github.com/sevensir888/codex-command-center/releases).
 
 ## License
 

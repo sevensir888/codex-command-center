@@ -2,16 +2,13 @@
 
 All notable changes to Codex Command Center are documented here.
 
-The format is based on Keep a Changelog, and this project uses semantic versioning for public release candidates.
+The format is based on Keep a Changelog, and this project uses semantic versioning for public releases.
 
 ## [Unreleased]
 
-### Added
+No changes yet.
 
-- Release-readiness automation for CI, dependency updates, and Windows release packaging.
-- Public project documentation for contribution, security reporting, maintainership, and roadmap planning.
-
-## [0.1.0] - Release candidate
+## [0.1.0] - 2026-08-20
 
 ### Added
 
@@ -32,7 +29,7 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 ### Packaging
 
 - Tauri metadata normalized for Codex Command Center v0.1.0.
-- Windows release workflow prepared for tagged release builds.
+- Windows release workflow for tagged release builds.
 
 ### Known limitations
 

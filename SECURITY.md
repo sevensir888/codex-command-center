@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are accepted for the current public release candidate line:
+Security fixes are accepted for the current public release line:
 
 | Version | Supported |
 | --- | --- |
