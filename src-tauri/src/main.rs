@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{
-    collections::{BTreeMap, HashSet},
+    collections::HashSet,
     fs,
     io::{BufRead, BufReader},
     path::{Path, PathBuf},
@@ -157,7 +157,8 @@ struct InitialData {
 fn get_initial_data() -> Result<InitialData, String> {
     let state = load_state();
     let sessions = index_sessions_inner(&state.settings.sessions_root)?;
-    let environment = inspect_environment_inner(&state.settings.codex_command, &state.settings.sessions_root);
+    let environment =
+        inspect_environment_inner(&state.settings.codex_command, &state.settings.sessions_root);
     let git = state.projects.iter().map(project_git_status).collect();
     Ok(InitialData {
         state,
@@ -225,7 +226,11 @@ fn commit_changes(path: String, message: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-fn launch_codex_resume(codex_command: String, cwd: String, session_id: String) -> Result<(), String> {
+fn launch_codex_resume(
+    codex_command: String,
+    cwd: String,
+    session_id: String,
+) -> Result<(), String> {
     launch_codex(&codex_command, &cwd, &["resume", &session_id])
 }
 
@@ -291,7 +296,9 @@ fn index_sessions_inner(sessions_root: &str) -> Result<Vec<CodexSession>, String
     let mut sessions = Vec::new();
     for entry in WalkDir::new(&root).into_iter().filter_map(Result::ok) {
         let path = entry.path();
-        if !entry.file_type().is_file() || path.extension().and_then(|s| s.to_str()) != Some("jsonl") {
+        if !entry.file_type().is_file()
+            || path.extension().and_then(|s| s.to_str()) != Some("jsonl")
+        {
             continue;
         }
         if let Some(session) = parse_session_file(path) {
@@ -321,20 +328,23 @@ fn parse_session_file(path: &Path) -> Option<CodexSession> {
     let mut model = String::new();
     let mut line_count = 0usize;
 
-    for line in reader.lines().filter_map(Result::ok) {
+    for line in reader.lines().map_while(Result::ok) {
         line_count += 1;
         if line.trim().is_empty() {
             continue;
         }
         if let Ok(value) = serde_json::from_str::<Value>(&line) {
             if created_at.is_empty() {
-                created_at = find_string_by_keys(&value, &["timestamp", "created_at", "createdAt"]).unwrap_or_default();
+                created_at = find_string_by_keys(&value, &["timestamp", "created_at", "createdAt"])
+                    .unwrap_or_default();
             }
-            if let Some(ts) = find_string_by_keys(&value, &["timestamp", "created_at", "createdAt"]) {
+            if let Some(ts) = find_string_by_keys(&value, &["timestamp", "created_at", "createdAt"])
+            {
                 last_activity = ts;
             }
             if project_path.is_empty() {
-                project_path = find_string_by_keys(&value, &["cwd", "current_working_directory"]).unwrap_or_default();
+                project_path = find_string_by_keys(&value, &["cwd", "current_working_directory"])
+                    .unwrap_or_default();
             }
             if title.is_empty() {
                 title = find_first_user_text(&value).unwrap_or_default();
@@ -357,7 +367,11 @@ fn parse_session_file(path: &Path) -> Option<CodexSession> {
         project_path,
         created_at,
         last_activity,
-        title: if title.is_empty() { id } else { clean_title(&title) },
+        title: if title.is_empty() {
+            id
+        } else {
+            clean_title(&title)
+        },
         model,
         line_count,
     })
@@ -457,7 +471,10 @@ fn project_git_status(project: &Project) -> GitStatus {
     };
 
     let porcelain = run_git(&["-C", &project.path, "status", "--porcelain"]).unwrap_or_default();
-    let changed = porcelain.lines().filter_map(parse_git_porcelain_line).collect();
+    let changed = porcelain
+        .lines()
+        .filter_map(parse_git_porcelain_line)
+        .collect();
     GitStatus {
         project_id: project.id.clone(),
         path: project.path.clone(),
@@ -474,12 +491,15 @@ fn parse_git_porcelain_line(line: &str) -> Option<GitFileChange> {
         return None;
     }
     let x = line.chars().next().unwrap_or(' ');
-    let y = line.chars().nth(1).unwrap_or(' ');
     let status = line[..2].trim().to_string();
     let path = line[3..].to_string();
     Some(GitFileChange {
         path,
-        status: if status.is_empty() { "Modified".to_string() } else { status },
+        status: if status.is_empty() {
+            "Modified".to_string()
+        } else {
+            status
+        },
         staged: x != ' ' && x != '?',
     })
 }
@@ -502,7 +522,11 @@ fn run_git(args: &[&str]) -> Result<String, String> {
 }
 
 fn inspect_environment_inner(codex_command: &str, _sessions_root: &str) -> CodexEnvironment {
-    let command = if codex_command.trim().is_empty() { "codex" } else { codex_command.trim() };
+    let command = if codex_command.trim().is_empty() {
+        "codex"
+    } else {
+        codex_command.trim()
+    };
     let cli_path = which::which(command)
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
@@ -547,7 +571,13 @@ fn read_config_summary(path: PathBuf) -> ConfigFileSummary {
     let exists = path.exists();
     let redacted_preview = if exists {
         fs::read_to_string(&path)
-            .map(|content| redact_config(&content).lines().take(16).collect::<Vec<_>>().join("\n"))
+            .map(|content| {
+                redact_config(&content)
+                    .lines()
+                    .take(16)
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            })
             .unwrap_or_else(|_| "The file exists but could not be read.".to_string())
     } else {
         String::new()
@@ -564,7 +594,11 @@ fn redact_config(content: &str) -> String {
         .lines()
         .map(|line| {
             let lower = line.to_ascii_lowercase();
-            if lower.contains("key") || lower.contains("token") || lower.contains("secret") || lower.contains("password") {
+            if lower.contains("key")
+                || lower.contains("token")
+                || lower.contains("secret")
+                || lower.contains("password")
+            {
                 let left = line.split(['=', ':']).next().unwrap_or("secret");
                 format!("{} = [redacted]", left.trim())
             } else {
@@ -585,11 +619,20 @@ fn discover_skills() -> Vec<InventoryItem> {
         if !root.exists() {
             continue;
         }
-        for entry in WalkDir::new(root).min_depth(1).max_depth(2).into_iter().filter_map(Result::ok) {
+        for entry in WalkDir::new(root)
+            .min_depth(1)
+            .max_depth(2)
+            .into_iter()
+            .filter_map(Result::ok)
+        {
             if entry.file_type().is_file() && entry.file_name() == "SKILL.md" {
                 if let Some(parent) = entry.path().parent() {
                     items.push(InventoryItem {
-                        name: parent.file_name().and_then(|s| s.to_str()).unwrap_or("Unnamed skill").to_string(),
+                        name: parent
+                            .file_name()
+                            .and_then(|s| s.to_str())
+                            .unwrap_or("Unnamed skill")
+                            .to_string(),
                         location: parent.to_string_lossy().to_string(),
                         available: true,
                     });
@@ -631,7 +674,11 @@ fn parse_mcp_file(path: &Path) -> Vec<McpServerSummary> {
 
 fn parse_mcp_json(path: &Path, value: &Value) -> Vec<McpServerSummary> {
     let mut result = Vec::new();
-    if let Some(servers) = value.get("mcpServers").or_else(|| value.get("mcp_servers")).and_then(Value::as_object) {
+    if let Some(servers) = value
+        .get("mcpServers")
+        .or_else(|| value.get("mcp_servers"))
+        .and_then(Value::as_object)
+    {
         for (name, server) in servers {
             let command = server
                 .get("command")
@@ -690,9 +737,14 @@ fn launch_codex(command: &str, cwd: &str, args: &[&str]) -> Result<(), String> {
         return Err("The selected project directory no longer exists.".to_string());
     }
 
-    let mut process = Command::new(if command.trim().is_empty() { "codex" } else { command.trim() });
+    let mut process = Command::new(if command.trim().is_empty() {
+        "codex"
+    } else {
+        command.trim()
+    });
     process.current_dir(cwd_path).args(args);
     process.spawn().map(|_| ()).map_err(|_| {
-        "Codex CLI was not found or could not be started. Check the Codex command in Settings.".to_string()
+        "Codex CLI was not found or could not be started. Check the Codex command in Settings."
+            .to_string()
     })
 }

@@ -6,10 +6,6 @@ authors = ["Codex Command Center contributors"]
 edition = "2021"
 license = "Apache-2.0"
 
-[lib]
-name = "codex_command_center_lib"
-crate-type = ["staticlib", "cdylib", "rlib"]
-
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
