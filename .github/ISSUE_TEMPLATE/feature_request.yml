@@ -7,6 +7,21 @@ body:
     attributes:
       value: |
         Keep requests aligned with the local-first Codex workflow: projects, tasks, sessions, Git changes, Skills, and MCP visibility.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Select the closest product area so maintainers can route the request.
+      options:
+        - Projects
+        - Tasks
+        - Sessions
+        - Git
+        - Skills / MCP
+        - Windows / packaging
+        - Other
+    validations:
+      required: true
   - type: textarea
     id: problem
     attributes:

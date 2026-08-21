@@ -7,6 +7,21 @@ body:
     attributes:
       value: |
         Thanks for helping improve Codex Command Center. Remove API keys, tokens, private repository content, personal information, and sensitive logs before submitting.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Select the closest product area so maintainers can route the issue.
+      options:
+        - Projects
+        - Tasks
+        - Sessions
+        - Git
+        - Skills / MCP
+        - Windows / packaging
+        - Other
+    validations:
+      required: true
   - type: input
     id: app-version
     attributes:

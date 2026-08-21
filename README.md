@@ -79,7 +79,7 @@ The project does not add telemetry, analytics, accounts, cloud synchronization, 
 - Windows 11 is the primary supported platform.
 - Git on `PATH` for Git review.
 - Codex CLI on `PATH` for launch and resume actions.
-- Node.js 20 or newer, Rust, and Cargo are required only for source development and production builds.
+- Node.js 24 is the validated source-development and production-build version; Rust and Cargo are also required for native builds.
 
 ## Installation
 
@@ -158,6 +158,8 @@ This project has been substantially refocused and reworked around a Windows-firs
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Use [Issues](https://github.com/sevensir888/codex-command-center/issues) for bugs and focused feature requests, [Discussions](https://github.com/sevensir888/codex-command-center/discussions) for questions, workflow ideas, and general feedback, and [Security](https://github.com/sevensir888/codex-command-center/security) for private vulnerability reports.
 
 ## Security
 

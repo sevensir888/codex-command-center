@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Questions and usage help
+    url: https://github.com/sevensir888/codex-command-center/discussions
+    about: Ask usage questions, share workflows, or start an open-ended discussion.
+  - name: Report a security vulnerability
+    url: https://github.com/sevensir888/codex-command-center/security
+    about: Use the repository's private vulnerability reporting channel for security issues.

@@ -9,7 +9,7 @@ The project is intentionally focused: it organizes local Codex engineering work 
 Requirements:
 
 - Windows 11 for the primary desktop development target.
-- Node.js 20 or newer.
+- Node.js 24, matching the current CI/build environment.
 - Rust and Cargo for Tauri development and desktop builds.
 - Git on `PATH`.
 - Codex CLI on `PATH` when testing launch, resume, session, Skills, or MCP behavior.
@@ -70,6 +70,12 @@ npm run tauri:build
 Codex Command Center may inspect local project paths, Git diffs, Codex session metadata, Skills, and MCP configuration. Do not include secrets, tokens, private repository content, personal data, session transcripts, or machine-specific identifiers in issues, screenshots, tests, or fixtures.
 
 Use neutral examples such as `sample-web-app`, `desktop-client`, and `api-service`.
+
+## Questions and discussions
+
+Use [GitHub Discussions](https://github.com/sevensir888/codex-command-center/discussions) for usage questions, workflow discussion, open-ended ideas, and general feedback. Keep focused bug reports and actionable feature requests in Issues.
+
+Report security vulnerabilities through the repository [Security page](https://github.com/sevensir888/codex-command-center/security) and private vulnerability reporting, not public Issues.
 
 ## Reporting bugs
 
