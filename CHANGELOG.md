@@ -6,6 +6,12 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
+### Reliability
+
+- Made local state persistence resilient to interrupted writes by safely replacing `state.json` and keeping a rolling recovery backup.
+- Added recovery from `state.json.bak` when the primary state file is corrupted.
+- Added Rust regression tests for local state persistence and recovery behavior.
+
 ### Changed
 
 - Updated GitHub Actions workflows to Node.js 24-compatible action versions.
