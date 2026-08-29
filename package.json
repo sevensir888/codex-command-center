@@ -1,6 +1,6 @@
 {
   "name": "codex-command-center",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A local desktop control center for organizing Codex projects, engineering tasks, sessions, Git changes, Skills, and MCP configuration.",
   "license": "Apache-2.0",
   "repository": {

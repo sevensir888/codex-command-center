@@ -6,9 +6,14 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
+No changes yet.
+
+## [0.1.1] - 2026-08-29
+
 ### Reliability
 
-- Made local state persistence resilient to interrupted writes by safely replacing `state.json` and keeping a rolling recovery backup.
+- Made local state persistence resilient to interrupted writes using same-directory temporary writes and safer replacement behavior.
+- Added a rolling recovery backup for the previous valid local state.
 - Added recovery from `state.json.bak` when the primary state file is corrupted.
 - Added Rust regression tests for local state persistence and recovery behavior.
 
@@ -20,7 +25,7 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ### Documentation
 
-- Updated installation and release documentation after the v0.1.0 public release.
+- Updated release and installation guidance.
 - Clarified Issues, Discussions, and private security-reporting routes.
 - Added area selection to bug and feature request forms.
 

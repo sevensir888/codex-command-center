@@ -1,6 +1,6 @@
 [package]
 name = "codex-command-center"
-version = "0.1.0"
+version = "0.1.1"
 description = "A local desktop control center for Codex engineering work."
 authors = ["Codex Command Center contributors"]
 edition = "2021"
