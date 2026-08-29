@@ -10,7 +10,12 @@ use std::{
 };
 use walkdir::WalkDir;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+mod state_store;
+
+const STATE_DIR_OVERRIDE_ENV: &str = "CODEX_COMMAND_CENTER_STATE_DIR";
+const HOME_DIR_OVERRIDE_ENV: &str = "CODEX_COMMAND_CENTER_HOME_DIR";
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 struct AppState {
     projects: Vec<Project>,
@@ -19,7 +24,7 @@ struct AppState {
     settings: AppSettings,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 struct Project {
     id: String,
@@ -28,7 +33,7 @@ struct Project {
     created_at: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 struct EngineeringTask {
     id: String,
@@ -41,7 +46,7 @@ struct EngineeringTask {
     completion_summary: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "PascalCase")]
 enum TaskStatus {
     Planned,
@@ -50,14 +55,14 @@ enum TaskStatus {
     Blocked,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 struct TaskSessionLink {
     task_id: String,
     session_id: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 struct AppSettings {
     codex_command: String,
@@ -171,11 +176,7 @@ fn get_initial_data() -> Result<InitialData, String> {
 #[tauri::command]
 fn save_app_state(state: AppState) -> Result<(), String> {
     let path = state_file_path()?;
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
-    }
-    let data = serde_json::to_vec_pretty(&state).map_err(|e| e.to_string())?;
-    fs::write(path, data).map_err(|e| e.to_string())
+    state_store::save_state_to_path(&path, &state).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -266,13 +267,14 @@ fn load_state() -> AppState {
     let Ok(path) = state_file_path() else {
         return AppState::default();
     };
-    let Ok(bytes) = fs::read(path) else {
-        return AppState::default();
-    };
-    serde_json::from_slice(&bytes).unwrap_or_default()
+    state_store::load_state_with_recovery(&path)
 }
 
 fn state_file_path() -> Result<PathBuf, String> {
+    if let Some(base) = absolute_env_path(STATE_DIR_OVERRIDE_ENV) {
+        return Ok(base.join("state.json"));
+    }
+
     let base = dirs::data_local_dir()
         .or_else(dirs::data_dir)
         .ok_or_else(|| "Could not find a local application data directory.".to_string())?;
@@ -280,7 +282,16 @@ fn state_file_path() -> Result<PathBuf, String> {
 }
 
 fn default_sessions_root() -> Option<PathBuf> {
-    dirs::home_dir().map(|home| home.join(".codex").join("sessions"))
+    user_home_dir().map(|home| home.join(".codex").join("sessions"))
+}
+
+fn user_home_dir() -> Option<PathBuf> {
+    absolute_env_path(HOME_DIR_OVERRIDE_ENV).or_else(dirs::home_dir)
+}
+
+fn absolute_env_path(name: &str) -> Option<PathBuf> {
+    let path = PathBuf::from(std::env::var_os(name)?);
+    path.is_absolute().then_some(path)
 }
 
 fn index_sessions_inner(sessions_root: &str) -> Result<Vec<CodexSession>, String> {
@@ -555,7 +566,7 @@ fn inspect_environment_inner(codex_command: &str, _sessions_root: &str) -> Codex
 
 fn codex_config_files() -> Vec<ConfigFileSummary> {
     let mut result = Vec::new();
-    if let Some(home) = dirs::home_dir() {
+    if let Some(home) = user_home_dir() {
         for path in [
             home.join(".codex").join("config.toml"),
             home.join(".codex").join("config.json"),
@@ -611,7 +622,7 @@ fn redact_config(content: &str) -> String {
 
 fn discover_skills() -> Vec<InventoryItem> {
     let mut roots = Vec::new();
-    if let Some(home) = dirs::home_dir() {
+    if let Some(home) = user_home_dir() {
         roots.push(home.join(".codex").join("skills"));
     }
     let mut items = Vec::new();
@@ -646,7 +657,7 @@ fn discover_skills() -> Vec<InventoryItem> {
 
 fn discover_mcp_servers() -> Vec<McpServerSummary> {
     let mut result = Vec::new();
-    if let Some(home) = dirs::home_dir() {
+    if let Some(home) = user_home_dir() {
         for path in [
             home.join(".codex").join("mcp.json"),
             home.join(".codex").join("config.toml"),
