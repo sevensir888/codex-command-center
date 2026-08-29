@@ -6,7 +6,17 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
-No changes yet.
+### Changed
+
+- Updated GitHub Actions workflows to Node.js 24-compatible action versions.
+- Refined Dependabot version-update policy to focus routine updates on minor and patch releases.
+- Updated lucide-react, npm transitive build dependencies, and Rust transitive dependencies through validated maintenance updates.
+
+### Documentation
+
+- Updated installation and release documentation after the v0.1.0 public release.
+- Clarified Issues, Discussions, and private security-reporting routes.
+- Added area selection to bug and feature request forms.
 
 ## [0.1.0] - 2026-08-20
 
