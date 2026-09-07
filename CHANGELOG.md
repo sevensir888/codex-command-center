@@ -6,7 +6,9 @@ The format is based on Keep a Changelog, and this project uses semantic versioni
 
 ## [Unreleased]
 
-No changes yet.
+### Changed
+
+- Updated validated frontend build-chain and Rust transitive dependencies.
 
 ## [0.1.1] - 2026-08-29
 
